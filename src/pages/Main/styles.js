@@ -13,15 +13,28 @@ export const Container = styled.div`
   margin: 80px auto;
 `;
 
-export const Owner = styled.header`
+export const Owner = styled.div`
   display: flex;
   justify-content: start;
-  align-items: start;
+  align-items: end;
 
   img {
     width: 100px;
     height: 100px;
     border-radius: 5px;
+  }
+
+  span {
+    font-size: 25px;
+    color: #4a4a4a;
+    font-weight: bold;
+    display: flex;
+    align-items: end;
+  }
+
+  p {
+    display: flex;
+    justify-items: start;
   }
 `;
 
@@ -32,7 +45,7 @@ export const Form = styled.form`
 
   input {
     border: 1px solid #eee;
-    padding: 0px 70px 25px 5px;
+    padding: 12.5px;
     transition: border 0.25s ease-out;
   }
 `;
@@ -50,3 +63,5 @@ export const SubmitButton = styled.button`
   justify-content: center;
   align-items: center;
 `;
+
+export const List = styled.div``;
