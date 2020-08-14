@@ -4,7 +4,15 @@ import { FaPlus } from 'react-icons/fa';
 
 import api from '../../services/api';
 
-import { Container, Owner, Form, SubmitButton, Header, List } from './styles';
+import {
+  Container,
+  Owner,
+  Form,
+  SubmitButton,
+  Header,
+  List,
+  Body,
+} from './styles';
 
 export default class Main extends Component {
   state = {
@@ -52,10 +60,12 @@ export default class Main extends Component {
             </SubmitButton>
           </Form>
         </Header>
-
-        <List>
-          <h2>Ola</h2>
-        </List>
+        <Body>
+          <List>
+            <h1>Name</h1>
+            <span>Description</span>
+          </List>
+        </Body>
       </Container>
     );
   }
