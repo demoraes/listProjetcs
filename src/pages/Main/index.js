@@ -1,6 +1,6 @@
 /* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaStar } from 'react-icons/fa';
 
 import api from '../../services/api';
 
@@ -17,6 +17,7 @@ import {
 export default class Main extends Component {
   state = {
     newRepo: '',
+    repositories: [],
   };
 
   handleInputChange = (e) => {
@@ -26,15 +27,27 @@ export default class Main extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { newRepo } = this.state;
+    const { newRepo, repositories } = this.state;
 
     const response = await api.get(`/repos/${newRepo}`);
 
-    console.log(response);
+    const data = {
+      id: response.data.id,
+      name: response.data.name,
+      description: response.data.description,
+      stargazers_count: response.data.stargazers_count,
+      language: response.data.language,
+      html_url: response.data.html_url,
+    };
+
+    this.setState({
+      repositories: [...repositories, data],
+      newRepo: '',
+    });
   };
 
   render() {
-    const { newRepo } = this.state;
+    const { newRepo, repositories } = this.state;
     return (
       <Container>
         <Header>
@@ -61,9 +74,20 @@ export default class Main extends Component {
           </Form>
         </Header>
         <Body>
+          {repositories.map((repository) => (
+            <List key={repository.id}>
+              <h1>{repository.name}</h1>
+              <p>{repository.description}</p>
+              <span>{repository.language}</span>
+              <span>{repository.stargazers_count}</span>
+            </List>
+          ))}
           <List>
             <h1>Name</h1>
-            <span>Description</span>
+            <p>descrição</p>
+            <span>
+              lanhuage <FaStar /> 3
+            </span>
           </List>
         </Body>
       </Container>

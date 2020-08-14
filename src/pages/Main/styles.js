@@ -70,6 +70,19 @@ export const List = styled.div`
   padding: 13px 15px;
   margin-top: 20px;
   margin-left: 10px;
+
+  h1 {
+    color: #11275f;
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 12px;
+    color: #000;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 `;
 
 export const Body = styled.body`
