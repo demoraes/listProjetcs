@@ -43,8 +43,9 @@ export const Form = styled.form`
   align-items: end;
 
   input {
+    flex: 1;
     border: 1px solid #eee;
-    padding: 13px;
+    padding: 13px 15px;
     transition: border 0.25s ease-out;
   }
 `;
