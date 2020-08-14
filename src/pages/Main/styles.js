@@ -7,8 +7,8 @@ export const Header = styled.header`
 
 export const Container = styled.div`
   max-width: 80%;
-  background: #fff;
-  box-shadow: 0 0 20px rgba(0, 0, 10, 0.1);
+  background: #eee;
+  box-shadow: 0 0 20px rgba(0, 0, 10, 0.5);
   padding: 30px;
   margin: 80px auto;
 `;
@@ -26,15 +26,14 @@ export const Owner = styled.div`
 
   span {
     font-size: 25px;
-    color: #4a4a4a;
+    color: #000;
     font-weight: bold;
-    display: flex;
-    align-items: end;
+    margin-left: 10px;
   }
 
   p {
-    display: flex;
-    justify-items: start;
+    margin-left: 10px;
+    color: #000;
   }
 `;
 
@@ -45,19 +44,20 @@ export const Form = styled.form`
 
   input {
     border: 1px solid #eee;
-    padding: 12.5px;
+    padding: 13px;
     transition: border 0.25s ease-out;
   }
 `;
 
-export const SubmitButton = styled.button`
+export const SubmitButton = styled.button.attrs({
+  type: 'submit',
+})`
   background: #11275f;
-  width: 50px;
   border: 0;
   color: #fff;
   padding: 15px;
   cursor: pointer;
-  margin-left: 15px;
+  margin-left: 10px;
 
   display: flex;
   justify-content: center;
