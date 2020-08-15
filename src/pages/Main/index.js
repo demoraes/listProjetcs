@@ -1,6 +1,6 @@
 /* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
-import { FaPlus, FaStar } from 'react-icons/fa';
+import { FaPlus, FaStar, FaCircle, FaSpinner } from 'react-icons/fa';
 
 import api from '../../services/api';
 
@@ -18,7 +18,25 @@ export default class Main extends Component {
   state = {
     newRepo: '',
     repositories: [],
+    loading: false,
+    error: null,
   };
+
+  componentDidMount() {
+    const repositories = localStorage.getItem('repositories');
+
+    if (repositories) {
+      this.setState({ repositories: JSON.parse(repositories) });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { repositories } = this.state;
+
+    if (prevState !== repositories) {
+      localStorage.setItem('repositories', JSON.stringify(repositories));
+    }
+  }
 
   handleInputChange = (e) => {
     this.setState({ newRepo: e.target.value });
@@ -27,27 +45,35 @@ export default class Main extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { newRepo, repositories } = this.state;
+    try {
+      const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+      this.setState({ loading: true, error: false });
 
-    const data = {
-      id: response.data.id,
-      name: response.data.name,
-      description: response.data.description,
-      stargazers_count: response.data.stargazers_count,
-      language: response.data.language,
-      html_url: response.data.html_url,
-    };
+      const response = await api.get(`/repos/${newRepo}`);
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-    });
+      const data = {
+        id: response.data.id,
+        name: response.data.name,
+        description: response.data.description,
+        stargazers_count: response.data.stargazers_count,
+        language: response.data.language,
+        html_url: response.data.html_url,
+      };
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+      });
+    } catch (error) {
+      this.setState({ error: true });
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
   render() {
-    const { newRepo, repositories } = this.state;
+    const { newRepo, repositories, loading, error } = this.state;
     return (
       <Container>
         <Header>
@@ -61,34 +87,46 @@ export default class Main extends Component {
               <p>Descrição</p>
             </div>
           </Owner>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit} error={error}>
             <input
               type="text"
               placeholder="Adicionar repositórios"
               value={newRepo}
               onChange={this.handleInputChange}
             />
-            <SubmitButton>
-              <FaPlus color="#fff" size={14} />
+
+            <SubmitButton loading={loading}>
+              {loading ? (
+                <FaSpinner color="#fff" size={14} />
+              ) : (
+                <FaPlus color="#fff" size={14} />
+              )}
             </SubmitButton>
           </Form>
         </Header>
         <Body>
           {repositories.map((repository) => (
             <List key={repository.id}>
-              <h1>{repository.name}</h1>
+              <a href={repository.html_url}>
+                <h1>{repository.name}</h1>
+              </a>
               <p>{repository.description}</p>
-              <span>{repository.language}</span>
-              <span>{repository.stargazers_count}</span>
+              <div>
+                <FaCircle
+                  size={12}
+                  color="#aaa"
+                  style={{ marginRight: '0.3rem' }}
+                />
+                <span>{repository.language}</span>
+                <FaStar
+                  size={13}
+                  color="#aaa"
+                  style={{ marginLeft: '0.8rem', marginRight: '0.3rem' }}
+                />
+                <span>{repository.stargazers_count}</span>
+              </div>
             </List>
           ))}
-          <List>
-            <h1>Name</h1>
-            <p>descrição</p>
-            <span>
-              lanhuage <FaStar /> 3
-            </span>
-          </List>
         </Body>
       </Container>
     );

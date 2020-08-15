@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 export const Header = styled.header`
   display: grid;
@@ -44,15 +44,26 @@ export const Form = styled.form`
 
   input {
     flex: 1;
-    border: 1px solid #eee;
+    border: 1px solid ${(props) => (props.error ? '#ff6b6b' : '#eee')};
     padding: 13px 15px;
     transition: border 0.25s ease-out;
   }
 `;
 
-export const SubmitButton = styled.button.attrs({
+const rotate = keyframes`
+  from {
+    transform:rotate(0deg);
+  }
+
+  to {
+    transform:rotate(360deg);
+  }
+`;
+
+export const SubmitButton = styled.button.attrs((props) => ({
   type: 'submit',
-})`
+  disabled: props.loading,
+}))`
   background: #11275f;
   border: 0;
   color: #fff;
@@ -63,6 +74,19 @@ export const SubmitButton = styled.button.attrs({
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &[disabled] {
+    cursor: not-aloowed;
+    opacity: 0.6;
+  }
+
+  ${(props) =>
+    props.loading &&
+    css`
+      svg {
+        animation: ${rotate} 2s linear infinite;
+      }
+    `}
 `;
 
 export const List = styled.div`
@@ -70,6 +94,7 @@ export const List = styled.div`
   padding: 13px 15px;
   margin-top: 20px;
   margin-left: 10px;
+  list-style: none;
 
   h1 {
     color: #11275f;
@@ -82,6 +107,14 @@ export const List = styled.div`
 
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+
+  div {
+    margin-top: 10px;
+  }
+
+  a {
+    text-decoration: none;
   }
 `;
 
