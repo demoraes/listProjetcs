@@ -1,3 +1,4 @@
+/* eslint-disable no-throw-literal */
 /* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import { FaPlus, FaStar, FaCircle, FaSpinner } from 'react-icons/fa';
@@ -33,28 +34,35 @@ export default class Main extends Component {
   componentDidUpdate(_, prevState) {
     const { repositories } = this.state;
 
-    if (prevState !== repositories) {
+    if (prevState.repositories !== repositories) {
       localStorage.setItem('repositories', JSON.stringify(repositories));
     }
   }
 
   handleInputChange = (e) => {
-    this.setState({ newRepo: e.target.value });
+    this.setState({ newRepo: e.target.value, error: null });
   };
 
   handleSubmit = async (e) => {
     e.preventDefault();
 
+    this.setState({ loading: true, error: false });
+
     try {
       const { newRepo, repositories } = this.state;
 
-      this.setState({ loading: true, error: false });
+      if (newRepo === '') throw 'Precisa indicar um repositorio';
+
+      const hasRepo = repositories.find((r) => r.full_name === newRepo);
+
+      if (hasRepo) throw 'Repositório duplicado';
 
       const response = await api.get(`/repos/${newRepo}`);
 
       const data = {
         id: response.data.id,
         name: response.data.name,
+        full_name: response.data.full_name,
         description: response.data.description,
         stargazers_count: response.data.stargazers_count,
         language: response.data.language,
