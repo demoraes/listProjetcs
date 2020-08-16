@@ -7,13 +7,6 @@ export const Header = styled.header`
   padding: 13px 15px;
 `;
 
-export const Container = styled.div`
-  max-width: 80%;
-  background: #eee;
-  box-shadow: 0 0 20px rgba(0, 0, 10, 0.5);
-  margin: 80px auto;
-`;
-
 export const Owner = styled.div`
   display: flex;
   justify-content: start;

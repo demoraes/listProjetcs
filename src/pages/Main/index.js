@@ -5,15 +5,8 @@ import { FaPlus, FaStar, FaCircle, FaSpinner } from 'react-icons/fa';
 
 import api from '../../services/api';
 
-import {
-  Container,
-  Owner,
-  Form,
-  SubmitButton,
-  Header,
-  List,
-  Body,
-} from './styles';
+import Container from '../../components/Container';
+import { Owner, Form, SubmitButton, Header, List, Body } from './styles';
 
 export default class Main extends Component {
   state = {
