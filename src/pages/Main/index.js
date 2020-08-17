@@ -1,6 +1,7 @@
 /* eslint-disable no-throw-literal */
 /* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FaPlus, FaStar, FaCircle, FaSpinner } from 'react-icons/fa';
 
 import api from '../../services/api';
@@ -9,20 +10,45 @@ import Container from '../../components/Container';
 import { Owner, Form, SubmitButton, Header, List, Body } from './styles';
 
 export default class Main extends Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        user: PropTypes.string,
+      }),
+    }).isRequired,
+  };
+
   state = {
     newRepo: '',
     repositories: [],
+    user: '',
     loading: false,
     error: null,
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const { match } = this.props;
+    const { user } = match.params;
+
+    const response = await api.get(`/users/${user}`);
+    // pegar name e bio
+
+    const data = {
+      name: response.data.name,
+      bio: response.data.bio,
+      avatar_url: response.data.avatar_url,
+    };
+
+    this.setState({
+      user: data,
+    });
+
     const repositories = localStorage.getItem('repositories');
 
     if (repositories) {
       this.setState({ repositories: JSON.parse(repositories) });
     }
-  }
+  };
 
   componentDidUpdate(_, prevState) {
     const { repositories } = this.state;
@@ -74,18 +100,16 @@ export default class Main extends Component {
   };
 
   render() {
-    const { newRepo, repositories, loading, error } = this.state;
+    const { newRepo, repositories, loading, user, error } = this.state;
+    console.log(user);
     return (
       <Container>
         <Header>
           <Owner>
-            <img
-              src="https://ogimg.infoglobo.com.br/cultura/24236924-ca1-ab2/FT1086A/652/86876180_Brazils-President-Jair-Bolsonaro-looks-on-during-a-ceremony-marking-his-400-days-in-of.jpg"
-              alt=""
-            />
+            <img src={user.avatar_url} alt={user.avatar_url} />
             <div>
-              <span>Demoraes</span>
-              <p>Descrição</p>
+              <span>{user.name}</span>
+              <p>{user.bio}</p>
             </div>
           </Owner>
           <Form onSubmit={this.handleSubmit} error={error}>

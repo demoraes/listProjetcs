@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Body = styled.body`
+export const Form = styled.form`
   padding: 40px;
   background: #11275f;
 
@@ -46,5 +46,3 @@ export const SubmitButton = styled.button`
     transition: border 0.25s ease-out;
   }
 `;
-
-export const Form = styled.form``;

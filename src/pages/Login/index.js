@@ -1,32 +1,44 @@
-/* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
-
-// import api from '../../services/api';
+import React, { useState } from 'react';
 
 import { FaArrowRight } from 'react-icons/fa';
+
+import api from '../../services/api';
+
 import Container from '../../components/Container';
-import { Body, SubmitButton, Form } from './styles';
+import { SubmitButton, Form } from './styles';
 
-export default class Login extends Component {
-  handleSubmit = async (e) => {
-    e.preventDefault();
-  };
+export default function Login({ history }) {
+  const [login, setLogin] = useState('');
 
-  render() {
-    return (
-      <Container>
-        <Body>
-          <h1>Login</h1>
-          <Form onSubmit={this.handleSubmit}>
-            <input type="text" />
-            <input type="password" />
-            <SubmitButton>
-              Entrar
-              <FaArrowRight style={{ marginLeft: '5px' }} />
-            </SubmitButton>
-          </Form>
-        </Body>
-      </Container>
-    );
+  async function handleInputChangeLogin(e) {
+    setLogin(e.target.value);
   }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const response = await api.get(`/users/${login}`);
+
+    history.push(`/main/${login}`);
+  }
+
+  return (
+    <Container>
+      <Form onSubmit={handleSubmit}>
+        <h1>Login</h1>
+
+        <input
+          type="text"
+          placeholder="Seu usuário do github"
+          value={login}
+          onChange={handleInputChangeLogin}
+        />
+
+        <SubmitButton>
+          Entrar
+          <FaArrowRight style={{ marginLeft: '5px' }} />
+        </SubmitButton>
+      </Form>
+    </Container>
+  );
 }
