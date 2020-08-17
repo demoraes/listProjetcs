@@ -29,7 +29,7 @@ export default function Login({ history }) {
 
         <input
           type="text"
-          placeholder="Seu usuário do github"
+          placeholder="seu usuário do github"
           value={login}
           onChange={handleInputChangeLogin}
         />
